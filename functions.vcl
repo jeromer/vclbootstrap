@@ -51,3 +51,16 @@ sub removeCookies {
 		unset req.http.Cookie;
 	}
 }
+
+/**
+ * Sets the current backend to either the dynamic server or to the static
+ * file server depending on the request. For now all requests for a binary
+ * file or sent to the "staticfile" backend
+ */
+sub setCorrectBackend {
+	set req.backend = default;
+
+	if (req.url ~ "\.(jp[e]?g|png|gif|css|js)$") {
+		set req.backend = staticfiles;
+	}
+}
