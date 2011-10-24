@@ -32,3 +32,13 @@ sub passIfNonIdempotent {
 		return (pass);
 	}
 }
+
+/**
+ * Returns "pass" if some authorization (i.e .htaccess) is required
+ * for the current page
+ */
+sub passIfAuthorized {
+	if (req.http.Authorization) {
+		return (pass);
+	}
+}
