@@ -42,3 +42,12 @@ sub passIfAuthorized {
 		return (pass);
 	}
 }
+
+/**
+ * Removes all cookies from the user request
+ */
+sub removeCookies {
+	if(req.http.Cookie) {
+		unset req.http.Cookie;
+	}
+}
