@@ -7,4 +7,6 @@ sub vcl_recv {
     call passIfAuthorized;
     call removeCookies;
     call setCorrectBackend;
+    call normalizeUserAgent;
+    call normalizeAcceptEncoding;
 }
