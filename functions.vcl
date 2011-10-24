@@ -91,3 +91,28 @@ sub normalizeUserAgent {
         set req.http.User-Agent = "unknown";
     }
 }
+
+/**
+ * Normalizes the Accept-Encoding header to a standard header with either
+ * "gzip" or "deflate". This maximize cache hits with respect to the Vary header
+ * which is often specified when using things like mod_deflate or any equivalent
+ *
+ * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
+ * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44
+ * @link https://httpd.apache.org/docs/2.2/mod/mod_deflate.html
+ */
+sub normalizeAcceptEncoding {
+    if (req.http.Accept-Encoding) {
+        if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg)$") {
+            /* we do not need Accept-Encoding for these ones */
+            remove req.http.Accept-Encoding;
+        } elsif (req.http.Accept-Encoding ~ "gzip") {
+            set req.http.Accept-Encoding = "gzip";
+        } elsif (req.http.Accept-Encoding ~ "deflate") {
+            set req.http.Accept-Encoding = "deflate";
+        } else {
+            /* unkown encoding method */
+            remove req.http.Accept-Encoding;
+        }
+    }
+}
