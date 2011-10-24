@@ -20,3 +20,15 @@ sub pipeIfNonRFC2616 {
 		return (pipe);
 	}
 }
+
+/**
+ * Returns "pass" if the request method is not GET or HEAD.
+ * POST request will be transfered to the origin server(s)
+ *
+ * @link https://secure.wikimedia.org/wikipedia/en/wiki/Idempotence
+ */
+sub passIfNonIdempotent {
+	if (req.request != "GET" && req.request != "HEAD") {
+		return (pass);
+	}
+}
