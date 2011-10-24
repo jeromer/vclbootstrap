@@ -64,3 +64,30 @@ sub setCorrectBackend {
 		set req.backend = staticfiles;
 	}
 }
+
+/**
+ * Normalizes the User-Agent header to its smallest version.
+ * This avoids having multiple cache objects for the same browser
+ * but with a slightly different User-Agent signature (i.e versio number)
+ * and thus maximize your cache hit
+ *
+ * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
+ * @link http://www.useragentstring.com/pages/useragentstring.php
+ */
+sub normalizeUserAgent {
+    if (req.http.User-Agent ~ "MSIE") {
+        set req.http.User-Agent = "msie";
+    } elseif(req.http.User-Agent ~ "Firefox") {
+        set req.http.User-Agent = "firefox";
+    } elseif(req.http.User-Agent ~ "Safari") {
+        set req.http.User-Agent = "safari";
+    } elseif(req.http.User-Agent ~ "Opera Mini/") {
+        set req.http.User-Agent = "opera-mini";
+    } elseif(req.http.User-Agent ~ "Opera Mobi/") {
+        set req.http.User-Agent = "opera-mobile";
+    } elseif(req.http.User-Agent ~ "Opera") {
+        set req.http.User-Agent = "opera";
+    } else {
+        set req.http.User-Agent = "unknown";
+    }
+}
