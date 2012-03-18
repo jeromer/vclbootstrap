@@ -116,3 +116,23 @@ sub normalizeAcceptEncoding {
         }
     }
 }
+
+/**
+ * BAN a list of object based on the hostname and the URL
+ * This subroutine is not compatible with the ban lurker as it
+ * uses "req" variables.
+ */
+sub banIfAllowed {
+    if (req.request == "BAN") {
+	/**
+	 * The purge ACL can be controlled in acl.vcl
+	 */
+	if (!client.ip ~ purge) {
+            error 405 "Not allowed.";
+        }
+
+        ban("req.http.host == " + req.http.host + " && req.url ~ " + req.url);
+
+        error 200 "Ban added";
+    }
+}
