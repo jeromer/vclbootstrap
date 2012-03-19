@@ -77,6 +77,8 @@ sub setCorrectBackend {
 sub normalizeUserAgent {
     if (req.http.User-Agent ~ "MSIE") {
         set req.http.User-Agent = "msie";
+    } elseif(req.http.User-Agent ~ "Mozilla") {
+        set req.http.User-Agent = "mozilla";
     } elseif(req.http.User-Agent ~ "Firefox") {
         set req.http.User-Agent = "firefox";
     } elseif(req.http.User-Agent ~ "Safari") {
